@@ -126,7 +126,7 @@ this.ngxService.start()
     }
     formData.append('category', this.signupData.category);
       formData.append('name', this.signupData.name);
-      formData.append('content', encodeURIComponent(this.signupData.content));
+      formData.append('content', this.signupData.content);
       this.loginService.addBlog(formData).subscribe((result) => {
         this.ngxService.stop();
         this.toastr.success('Category added succesfully.');
