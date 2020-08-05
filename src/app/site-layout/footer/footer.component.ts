@@ -3,6 +3,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { LoginService } from "./../../services/login.service";
 import { ToastrService } from 'ngx-toastr';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { Router,ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
@@ -11,7 +12,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 export class FooterComponent implements OnInit {
   cmsData:any
   email:any
-  constructor(private modalService: BsModalService,private loginService: LoginService,private toastr: ToastrService,private ngxService: NgxUiLoaderService) { }
+  constructor(private modalService: BsModalService,private loginService: LoginService,private toastr: ToastrService,private ngxService: NgxUiLoaderService,private router : Router) { }
 
   ngOnInit() {
     this.cmsData = this.loginService.getCms();
@@ -33,6 +34,10 @@ export class FooterComponent implements OnInit {
       this.ngxService.stop();
      });
   
+  }
+  vehicleCheck(){
+    this.router.navigateByUrl('/vehicle-check');
+   
   }
 
 }

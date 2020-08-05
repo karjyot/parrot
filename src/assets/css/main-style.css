@@ -1157,3 +1157,48 @@ table#vrmSearchTable td strong{font-size: 16px;}
   float: left;
   margin: 100px 0px;
 }
+button.footer-btn {
+  padding: 12px 60px;
+  display: inline-block;
+  border: 2px solid #ee4036 ;
+  color: #ee4036;
+  text-transform: capitalize;
+  background: #fff;
+  margin: 10px 0px;
+  line-height: 24px;
+  font-weight: bold;
+}
+button.footer-btn:hover{
+  background:#ee4036;
+  border:2px solid #fff;
+  color:#fff;
+}
+.vh-check{
+  position: relative;
+}
+.form-group.vh-check:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 29px;
+  background: #262261;
+  width: 38px;
+  height: 50px;
+  z-index: 100;
+  border-radius: 4px 0 0 4px;
+}
+.form-group.vh-check input{
+  padding: 24px 50px;background:#ffcb00;font-size:22px;font-weight:700;
+}
+img.regPlateBadge {
+  position: absolute;
+  z-index: 999;
+  top: 32px;
+  left: 7px;
+}
+
+a.ad-link{
+  margin: 12px 0px;
+    display: inline-block;
+
+}
