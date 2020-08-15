@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from "ngx-stripe";
 import { ToastrService } from 'ngx-toastr';
-import { NavigationEnd,Router } from "@angular/router";
+import { NavigationEnd,Router,ActivatedRoute} from "@angular/router";
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { LoginService } from "./../services/login.service";
+
 
 @Component({
   selector: 'app-checkout',
@@ -20,6 +21,7 @@ export class CheckoutComponent implements OnInit {
   cards:any;
   walletAmount:any
  selectedPlanID:any
+ idParam:any
   elementsOptions: ElementsOptions = {
     locale: 'en'
   };
@@ -33,7 +35,7 @@ export class CheckoutComponent implements OnInit {
   stripeTest: FormGroup;
   submitted = false;
   plans:any
-  constructor(private fb: FormBuilder,private stripeService: StripeService,private ngxService: NgxUiLoaderService,private loginService: LoginService,private toastr: ToastrService,private router : Router) { }
+  constructor(private fb: FormBuilder,private route: ActivatedRoute,private stripeService: StripeService,private ngxService: NgxUiLoaderService,private loginService: LoginService,private toastr: ToastrService,private router : Router) { }
   planDetails:any;
   wallet : any
   totalAmount:any;
@@ -42,9 +44,19 @@ export class CheckoutComponent implements OnInit {
   isDiablePay = true;
   checkboxWallet:false;
   deductedWallet:any;
+  sponsarPrice:any;
+  showFormAd = true
+  showFormSponsar = true
  
   ngOnInit() {
-  
+    let id =  this.route.snapshot.params.id;
+    if(id =='create-new-ad'){
+      this.showFormAd = false
+    }else{
+      this.showFormSponsar = false
+    }
+   
+    this.idParam = id
     this.ngxService.start();
     this.loginService.getWalletSummary(this.loginService.getUserDetails().id).subscribe((result:any) => {
       this.wallet = result['success'];
@@ -78,6 +90,19 @@ export class CheckoutComponent implements OnInit {
         this.ngxService.stop();
        })
 
+       this.loginService.getHomeContent().subscribe((result:any) => {
+        this.sponsarPrice = result['success'][0].price
+  
+        this.ngxService.stop();
+        },(err) => {
+         try{
+           let errMessage = err["error"]["message"];
+           this.toastr.error(errMessage);
+          }catch(e){
+   
+          }
+          this.ngxService.stop();
+         })
 
 
    this.planDetails =  this.loginService.getPlanDetails();
@@ -110,7 +135,7 @@ export class CheckoutComponent implements OnInit {
       });
   }
   buy(price){
-
+    if(this.idParam == 'create-new-ad'){
     let adDetail = this.loginService.getAdDetails();
     const formData = new FormData();
   if( this.fileData &&  this.fileData.length){
@@ -183,6 +208,9 @@ this.ngxService.start()
         token:result.token.id,
         userID : this.loginService.getUserDetails().id,
         planID  :this.loginService.getPlanDetails().id,
+
+        count_left:this.loginService.getPlanDetails().photos,
+        planType:this.loginService.getPlanDetails().type,
         amount  :price,
         walletAmount:this.walletAmount,
         email:this.loginService.getUserDetails().email,
@@ -191,14 +219,16 @@ this.ngxService.start()
     this.loginService.makePayment(data).subscribe((res) => {
 
       
+    
+      this.loginService.createAd(formData).subscribe((result) => {
+        this.router.navigateByUrl('/my-ads');
+         this.ngxService.stop();
+        }, (err) => {
+         this.toastr.error('Network error occured.');
+        
+        });
      
-    this.loginService.createAd(formData).subscribe((result) => {
-     this.router.navigateByUrl('/my-ads');
-      this.ngxService.stop();
-     }, (err) => {
-      this.toastr.error('Network error occured.');
-     
-     });
+   
       
     }, (err) => {
                   
@@ -217,10 +247,61 @@ this.ngxService.start()
   }
 
   })
+}else{
+
+  this.ngxService.start()
+   this.stripeService
+   .createToken(this.card, { name },)
+   .subscribe(result => {
+     if (result.token) {
+      let data = {
+        token:result.token.id,
+        userID : this.loginService.getUserDetails().id,
+        adId:this.idParam,
+       // planID  :this.loginService.getPlanDetails().id,
+        amount  :price,
+        walletAmount:this.walletAmount,
+        email:this.loginService.getUserDetails().email,
+        name:this.loginService.getUserDetails().name
+      }
+    this.loginService.makePayment(data).subscribe((res) => {
+
+      
+    
+      this.loginService.makeSponsar(this.idParam).subscribe((result) => {
+        this.router.navigateByUrl('/my-ads');
+         this.ngxService.stop();
+        }, (err) => {
+         this.toastr.error('Network error occured.');
+        
+        });
+     
+   
+      
+    }, (err) => {
+                  
+      try{
+        let errMessage = err["error"]["message"];
+        this.toastr.error(errMessage);
+       }catch(e){
+        this.toastr.error('Your card having some problems.');
+       }
+       this.ngxService.stop();         
+    });
+  }else if (result.error) {
+
+    this.toastr.error(result.error.message, 'Error');
+    this.ngxService.stop();
+  }
+
+  })
+
+
+}
   }
 
   walletSelection(){
-  
+  if(this.idParam == 'create-new-ad'){
     if(this.checkboxWallet){
       if(this.remaining < this.planDetails.price){
         this.isDiablePay = true
@@ -238,6 +319,27 @@ this.ngxService.start()
       }
       this.isDiablePay = true
     }
+    
+  }else{
+    if(this.checkboxWallet){
+      if(this.remaining < this.sponsarPrice){
+        this.isDiablePay = true
+        this.sponsarPrice =  (parseFloat(this.sponsarPrice) - parseFloat(this.remaining)).toFixed(2);
+        this.walletAmount = this.remaining
+      }else{
+        this.isDiablePay = false
+        this.walletAmount = this.sponsarPrice
+       
+      }
+    }else{
+      if(this.remaining < this.sponsarPrice){
+      let pricee =  parseFloat(this.sponsarPrice)+ parseFloat(this.remaining);
+      this.sponsarPrice = pricee.toFixed(2)
+      }
+      this.isDiablePay = true
+    }
+  }
+
 
     
     // if(this.checkboxWallet && this.isDiablePay){
@@ -252,6 +354,17 @@ this.ngxService.start()
   payWallet(){
     this.ngxService.start();
     this.loginService.payWalletUser({userId:this.loginService.getUserDetails().id,amount:this.walletAmount}).subscribe((result) => {
+      if(this.idParam != 'create-new-ad'){
+        this.loginService.makeSponsar(this.idParam).subscribe((result) => {
+          this.router.navigateByUrl('/my-ads');
+           this.ngxService.stop();
+          }, (err) => {
+           this.toastr.error('Network error occured.');
+          
+          });
+      }
+    
+      
       this.router.navigateByUrl('/my-ads');
        this.ngxService.stop();
       }, (err) => {

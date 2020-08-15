@@ -248,7 +248,7 @@ export class SearchComponent implements OnInit {
   urlShare:any;
   modalRefShare:BsModalRef | null;
   searchTags:any;
-  filterSelction = "Date Descending";
+  filterSelction = "Sponsor Ads";
   searchForm : FormGroup
   ngOnInit() {
     this.cmsData = this.loginService.getCms();
@@ -387,8 +387,7 @@ export class SearchComponent implements OnInit {
     this.ngxService.start();
     this.loginService.filterSearch(searchData,this.adType).subscribe((result) => {
       this.ads = result["success"];
-      this.ads.sort((val1, val2)=> {return <any> new Date(val2.created_at) - <any> new 
-        Date(val1.created_at)})
+      this.ads.sort((val1, val2)=> {return <any> (val2.is_sponsar) - <any>(val1.is_sponsar)})
         if(this.loginService.getUserDetails()){
           this.loginService.listBookMarksAll(this.loginService.getUserDetails().id).subscribe((result) => {
             let bookmarks = result['success'];
@@ -467,6 +466,11 @@ export class SearchComponent implements OnInit {
     if(type == 'priceAsc'){
       this.ads.sort((val1, val2)=> {return <any> (val2.price) - <any> (val1.price)});
       this.filterSelction = "Price Ascending";
+    }
+
+    if(type == 'sponsar'){
+      this.ads.sort((val1, val2)=> {return <any> (val2.is_sponsar) - <any> (val1.is_sponsar)});
+      this.filterSelction = "Sponsor Ads";
     }
     if(type == 'priceDesc'){
       this.ads.sort((val1, val2)=> {return <any> (val1.price) - <any> (val2.php )})

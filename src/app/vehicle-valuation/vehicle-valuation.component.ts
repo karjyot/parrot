@@ -5,7 +5,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { LoginService } from "./../services/login.service";
 import { Router } from "@angular/router";
 import {CookieService} from 'angular2-cookie/core';
-
+import * as xml2js from 'xml2js';
 
 @Component({
   selector: 'app-vehicle-valuation',
@@ -29,8 +29,17 @@ export class VehicleValuationComponent implements OnInit {
     }else{
       this.ngxService.start();
       this.loginService.mileageCheck({registrationNumber:this.registration,mileage:this.mileage}).subscribe((result) => {
-        
-        console.log(result)
+        var registration = this.registration
+        xml2js.parseString(result,(err, response) =>{
+         
+         
+          let obj = response.Valuation
+          obj["registrationNumber"] = registration
+          this.loginService.setValuation(obj)
+          this.ngxService.stop();
+          this.router.navigateByUrl('/vehicle-valuation-details')
+       });
+       // console.log(result)
         //this.loginService.setVehicleCheck(result['success'])
       //  this.router.navigateByUrl('/vehicle-details')
         this.ngxService.stop();

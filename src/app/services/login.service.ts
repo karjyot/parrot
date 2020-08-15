@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject} from 'rxjs';
 import {AppSettings } from './../constants';
 import { LOCAL_STORAGE } from '@ng-toolkit/universal';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -66,6 +67,26 @@ public messageData(data: any){
   }
   worksData() {
     return this.http.get(AppSettings.API_ENDPOINT + 'admin/worksData');
+  }
+
+
+  addbikeData(data) {
+    return this.http.post(AppSettings.API_ENDPOINT + 'admin/addbikeData',data);
+  }
+  addcarData(data) {
+    return this.http.post(AppSettings.API_ENDPOINT + 'admin/addcarData',data);
+  }
+  addtruckData(data) {
+    return this.http.post(AppSettings.API_ENDPOINT + 'admin/addtruckData',data);
+  }
+  addvehicleData(data) {
+    return this.http.post(AppSettings.API_ENDPOINT + 'admin/addvehicleData',data);
+  }
+  addfaqData(data) {
+    return this.http.post(AppSettings.API_ENDPOINT + 'admin/addfaqData',data);
+  }
+  addworksData(data) {
+    return this.http.post(AppSettings.API_ENDPOINT + 'admin/addWorksData',data);
   }
 
 
@@ -201,6 +222,9 @@ public messageData(data: any){
     this.localStorage.removeItem('setSearchRecords');
   }
   
+  deletePlanStorage() {
+    this.localStorage.removeItem('planDetails');
+  }
   
   getSocialDetails(){
     let details = this.localStorage.getItem('socialDetails');
@@ -351,6 +375,10 @@ editRecord(id,jsonPayload){
 deleteRecord(id){
   return this.http.get(AppSettings.API_ENDPOINT + 'deleteDomain/'+id);
 }
+
+makeSponsar(id){
+  return this.http.get(AppSettings.API_ENDPOINT + 'makeSponsar/'+id);
+}
 getAdsAdmin(){
   return this.http.get(AppSettings.API_ENDPOINT + 'getAdminAds');
 }
@@ -387,6 +415,12 @@ getPlanDetails(){
 makePayment(data){
   return this.http.post(AppSettings.API_ENDPOINT + 'makePayment',data);
 }
+
+makePaymentSponsar(data){
+  return this.http.post(AppSettings.API_ENDPOINT + 'makePaymentSponsar',data);
+}
+
+
 makePaymentZero(data){
   return this.http.post(AppSettings.API_ENDPOINT + 'makePaymentZero',data);
 }
@@ -422,7 +456,22 @@ bookmark(data){
 userAdsGet(id){
   return this.http.get(AppSettings.API_ENDPOINT + 'userContent/'+id);
 }
+userAdPlan(id){
+  return this.http.get(AppSettings.API_ENDPOINT + 'userAdPlan/'+id);
+}
 
+setUserDealerPlan(data){
+  this.localStorage.setItem('setUserDealerPlan',  JSON.stringify(data));
+}
+
+getUserDealerPlan(){
+  let details = this.localStorage.getItem('setUserDealerPlan');
+  return JSON.parse(details);
+  
+}
+updateCount(id){
+  return this.http.get(AppSettings.API_ENDPOINT + 'updateCount/'+id);
+}
 
 getUserPlans(id){
   return this.http.get(AppSettings.API_ENDPOINT + 'getPlanInfo/'+id);
@@ -530,9 +579,10 @@ vehicleCheck(data) {
 mileageCheck(data) {
   console.log(data)
 
-  var params = 'RegistrationNumber='+data.registrationNumber+'&mileage='+data.mileage+'&username=karansofat';
-  let headers = { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }) };
-  return this.http.post('https://www.regcheck.org.uk/api/bespokeapi.asmx/CheckPrice',params,headers);
+  var params = 'RegistrationNumber='+data.registrationNumber+'&mileage='+data.mileage+'&username=Prosper';
+  let headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }) ;
+ let response = this.http.post('https://www.regcheck.org.uk/api/bespokeapi.asmx/CheckPrice',params,{headers:headers,responseType:'text'});
+  return response
 }
 setVehicleCheck(data:any){
   this.localStorage.setItem('setVehicleCheck',  JSON.stringify(data));
@@ -542,5 +592,12 @@ getVehicleCheck(){
   let details = this.localStorage.getItem('setVehicleCheck');
   return JSON.parse(details);
 }
+setValuation(data:any){
+  this.localStorage.setItem('setValuation',  JSON.stringify(data));
+}
 
+getValuation(){
+  let details = this.localStorage.getItem('setValuation');
+  return JSON.parse(details);
+}
 }

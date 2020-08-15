@@ -4,7 +4,7 @@
           <div class="animated fadeIn">
              <div class="card">
                 <div class="card-header">
-                   <i class="fa fa-edit"></i> Plans
+                   <i class="fa fa-edit"></i> Motor Dealer Packages
                    <div class="card-header-actions">
                    </div>
                 </div>
@@ -44,6 +44,7 @@
                                      <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Username: activate to sort column descending" style="width: 281px;">Plan Name</th>
                                      <!-- <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Username: activate to sort column descending" style="width: 281px;">NameProsID</th> -->
                                      <!-- <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Username: activate to sort column descending" style="width: 281px;">NSAN </th> -->
+                                     <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Username: activate to sort column descending" style="width: 281px;">Ads</th>
                                      <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Username: activate to sort column descending" style="width: 281px;">Photos</th>
                                      <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date registered: activate to sort column ascending" style="width: 140.2px;">Price</th>
                                      <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date registered: activate to sort column ascending" style="width: 240.2px;">Duration</th>
@@ -61,6 +62,7 @@
                                      <td class="sorting_1 wordBreak" [innerHTML]="users.plan_name"></td>
                                      <!-- <td class="sorting_1 wordBreak">{{users.namepros}}</td> -->
                                      <!-- <td class="sorting_1 wordBreak">{{users.ns}}</td> -->
+                                     <td class="sorting_1 wordBreak">{{users.ads_limit}}</td>
                                      <td class="sorting_1 wordBreak">{{users.photos}}</td>
                                      <td class="sorting_1 wordBreak">£{{users.price}}</td>
                                      <td>{{users.duration}}</td>
@@ -168,6 +170,18 @@
                         <!-- <textarea type="text"  class="form-control" id="email_id" name="email_name" placeholder="Desciption"></textarea> -->
                      </div>
                   </div>
+
+                  <div class="col-md-6">
+                     <div class="form-group"> 
+                     
+                        <div class="form-group"> 
+                           <label for="email_id" class="control-label">Ads</label>
+                             <input type="text" [(ngModel)]="signupData.ads_limit"   [ngClass]="{ 'is-invalid': submitted && f.ads_limit.errors }" formControlName="ads_limit" class="form-control" id="email_id" name="email_name" placeholder="Ads">
+                           <!-- <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="signupData.photos"  formControlName="photos" [spellcheck]="true" ></angular-editor> -->
+                        </div>
+                       
+                     </div>
+                  </div>
    
                   <!-- <div class="col-md-6">
                      <div class="form-group"> 
@@ -258,16 +272,17 @@
                            </div>
                         </div>
 
-                        <!-- <div class="col-md-6">
+                        <div class="col-md-6">
                            <div class="form-group"> 
-                              <label for="email_id" >Type</label>
-                           <select class="custom-select custom-select-sm form-control form-control-sm" formControlName="type" [(ngModel)]="infos.type">
-                              <option value="normal">Normal</option>
-                              <option value="motor dealer">Motor Dealer</option>
-         
-                           </select>
+                           
+                              <div class="form-group"> 
+                                 <label for="email_id" class="control-label">Ads</label>
+                                   <input type="text" [(ngModel)]="infos.ads_limit"   [ngClass]="{ 'is-invalid': submitted && f.ads_limit.errors }" formControlName="ads_limit" class="form-control" id="email_id" name="email_name" placeholder="Ads">
+                                 <!-- <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="signupData.photos"  formControlName="photos" [spellcheck]="true" ></angular-editor> -->
+                              </div>
+                             
                            </div>
-                        </div> -->
+                        </div>
                       
                    
                      </div>

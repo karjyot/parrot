@@ -35,6 +35,7 @@ export class CreateAdComponent implements OnInit {
   bikes:any
   emison :any = 1
   truckMakes:any
+  isDealerPackage:any;
   makesCpy:any;
   color = [{name:"beige",checked:true},{name:"blue",checked:false},{name:"brown",checked:false},{name:"yellow",checked:false},{name:"grey",checked:false},{name:"green",checked:false},{name:"red",checked:false},{name:"black",checked:false},{name:"white",checked:false}]
 
@@ -243,7 +244,15 @@ export class CreateAdComponent implements OnInit {
   extCol = 'beige';
   upholeData:'alcantara';
   ngOnInit() {
-    this.maximumImages = this.loginService.getPlanDetails().photos;
+
+    this.isDealerPackage = this.loginService.getUserDealerPlan()
+ //  console.log()
+ if(this.loginService.getPlanDetails()){
+  this.maximumImages = this.loginService.getPlanDetails().photos;
+ }else{
+  this.maximumImages = this.isDealerPackage[0].photos
+ }
+    
     this.getMakes();
   this.getEqps();
     this.options = {
@@ -390,7 +399,7 @@ setGurantee(id){
 createAd(){
 
   this.submitted = true;
-  if(this.fileData.length == this.loginService.getPlanDetails().photos){
+  if(this.fileData.length == this.maximumImages){
     this.toastr.error("You have reached your limit as per selected plan.");
     return;
   }
@@ -459,7 +468,7 @@ for(var i=0; i<this.equpmentsEnter.length; i++){
       lat:this.lat,
       long:this.long,
       type:this.AdForm.value.type,
-      limit_images:this.loginService.getPlanDetails().photos,
+      limit_images:this.maximumImages,
       powerUnit:this.AdForm.value.powerUnit,
       country:"United Kingdom",
       engineSize:this.AdForm.value.engineSize,
@@ -483,7 +492,7 @@ for(var i=0; i<this.equpmentsEnter.length; i++){
     this.toastr.error("Please add valid fields")
     return
   }
-  if(this.loginService.getPlanDetails().price == 0){
+  if(this.loginService.getPlanDetails() && this.loginService.getPlanDetails().price == 0){
     const formData = new FormData();
     if( this.fileData &&  this.fileData.length){
       for (var i = 0; i < this.fileData.length; i++) { 
@@ -554,9 +563,86 @@ for(var i=0; i<this.equpmentsEnter.length; i++){
       });
        
      
-   }else{
+   }else if(this.isDealerPackage && this.isDealerPackage.length > 0 && this.isDealerPackage[0].count_left > 0){
+    const formData = new FormData();
+    if( this.fileData &&  this.fileData.length){
+      for (var i = 0; i < this.fileData.length; i++) { 
+        formData.append("fileUpload"+i, this.fileData[i]);
+      }
+    }
+    formData.append('make',this.AdForm.value.make)
+    formData.append('model',this.AdForm.value.model)
+    formData.append('variant',this.AdForm.value.variant)
+    formData.append('bodyType',this.AdForm.value.bodyType)
+    formData.append('price',this.AdForm.value.price)
+    formData.append('city',this.searchAddr)
+    formData.append('mileage',this.AdForm.value.mileage)
+    formData.append('power',this.AdForm.value.power)
+    formData.append('gear',this.AdForm.value.gear)
+    formData.append('seats',this.AdForm.value.seats)
+    formData.append('metalic',this.AdForm.value.metalic)
+    formData.append('hadAccident',this.AdForm.value.hadAccident)
+    formData.append('emmison',this.AdForm.value.emmison)
+    formData.append('filter',this.AdForm.value.filter)
+    formData.append('vat',this.AdForm.value.vat)
+    formData.append('gurantee',this.gurantee)
+    formData.append('uphole',this.upholeData)
+    formData.append('exteriorColor',this.extCol)
+    formData.append('interiorColor',this.intCol)
+    formData.append('eqpArr',JSON.stringify(eqpArr))
+    formData.append('vehicleCond',this.vehicleCond)
+    formData.append('owners',this.owners)
+    formData.append('sellers',this.seller)
+    formData.append('doors',this.doors)
+    formData.append('emison',this.emison)
+    formData.append('fuelType',this.AdForm.value.fuelType)
+    formData.append('description',this.AdForm.value.description)
+    formData.append('eqpArrExtra',JSON.stringify(eqpArrExtra))
+    formData.append('eqpArrSaftey',JSON.stringify(eqpArrSaftey))
+    formData.append('eqpArrEnter',JSON.stringify(eqpArrEnter))
+    formData.append('totalGears',this.AdForm.value.totalGears)
+    formData.append('displacement',this.AdForm.value.displacement)
+    formData.append('weight',this.AdForm.value.weight)
+    formData.append('cylinder',this.AdForm.value.cylinder)
+    formData.append('registration',this.AdForm.value.registration)
+    
+    formData.append('userID',this.loginService.getUserDetails().id)
+    formData.append('lat',this.lat)
+    formData.append('long',this.long)
+    formData.append('type',this.AdForm.value.type)
+    formData.append('limit_images',this.maximumImages)
+    formData.append('powerUnits',this.AdForm.value.powerUnits)
+    formData.append('country',"United Kingdom")
+    formData.append('engineSize',this.AdForm.value.engineSize)
+    formData.append('accleration',this.AdForm.value.accleration)
+    formData.append('annualTax',this.AdForm.value.annualTax)
+    formData.append('fuelConsumpation',this.AdForm.value.fuelConsumpation)
+
+    formData.append('co2',this.AdForm.value.co2)
+    formData.append('category',this.AdForm.value.category)
+  
+    
+  
+    this.ngxService.start();
+ 
+    this.loginService.createAd(formData).subscribe((result) => {
+
+      this.loginService.updateCount(this.isDealerPackage[0].id).subscribe((result) => {
+      
+        this.router.navigateByUrl('/my-ads');
+         this.ngxService.stop();
+        }, (err) => {
+         this.toastr.error('Network error occured.');
+        
+        });
+      }, (err) => {
+       this.toastr.error('Network error occured.');
+      
+      });
+   
+  }else{
       this.loginService.setadDetails(postData);
-     this.router.navigateByUrl("/checkout")
+     this.router.navigateByUrl("/checkout/create-new-ad")
    }
   
   
@@ -577,7 +663,7 @@ urls = [];
       return;
      }
     }
-     if(this.fileData.length == this.loginService.getPlanDetails().photos){
+     if(this.fileData.length == this.maximumImages){
       this.toastr.error("You have reached your limit as per selected plan.");
       return;
     }

@@ -9,12 +9,11 @@ import { Router } from "@angular/router";
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
-  selector: 'app-admin-plans',
-  templateUrl: './admin-plans.component.html',
-  styleUrls: ['./admin-plans.component.css']
+  selector: 'app-motor-packages',
+  templateUrl: './motor-packages.component.html',
+  styleUrls: ['./motor-packages.component.css']
 })
-export class AdminPlansComponent implements OnInit {
-
+export class MotorPackagesComponent implements OnInit {
   constructor(private loginService: LoginService,private adminService: AdminService,private modalService: BsModalService,private formBuilder:FormBuilder,private ngxService: NgxUiLoaderService,private toastr: ToastrService,private router : Router,) { }
   listUsers:any;
   signupForm: FormGroup;
@@ -37,8 +36,8 @@ modalRefStatus:BsModalRef | null;
 postStatus = "";
 status= "";
 countries:any
-  public infos = { photos:"",price:"",duration:"",name:'',description:"",text:'',type:""};
-  public signupData = { photos:"",price:"",duration:"",name:'',description:"",text:'',type:""};
+  public infos = { photos:"",price:"",duration:"",name:'',description:"",text:'',type:"",ads_limit:""};
+  public signupData = { photos:"",price:"",duration:"",name:'',description:"",text:'',type:"",ads_limit:""};
 submitted = false;
   ngOnInit() {
 
@@ -48,12 +47,14 @@ submitted = false;
       price: ['', [Validators.required]],
       duration: ['', [Validators.required]],
       description: [''],
+      ads_limit: ['', [Validators.required]],
       text:[''],
       type:['']
   });
    this.signupForm = this.formBuilder.group({    
     fname: ['', [Validators.required]],
     photos: ['', [Validators.required]],
+    ads_limit: ['', [Validators.required]],
     price: ['', [Validators.required]],
     duration: ['', [Validators.required]],
     description: [''],
@@ -64,10 +65,10 @@ submitted = false;
 this.ngxService.start()
     this.adminService.getPlans().subscribe(
       res => {
-        this.listUsers = []
+        this.listUsers = [];
         let plans = res['success'];
         for(var i=0; i<plans.length; i++){
-          if(plans[i].type == 'normal'){
+          if(plans[i].type == 'motor dealer'){
             this.listUsers.push(plans[i])
           }
         }
@@ -121,17 +122,18 @@ this.ngxService.start()
       const formData = new FormData();
       formData.append('name', this.signupData.name);
       formData.append('photos', this.signupData.photos);
+      formData.append('ads_limit', this.signupData.ads_limit);
       formData.append('price', this.signupData.price);
       formData.append('duration', this.signupData.duration);
       formData.append('description', this.signupData.description);
       formData.append('text', this.signupData.text);
-      formData.append('type', 'normal');
+      formData.append('type', 'motor dealer');
       this.adminService.addPackage(formData).subscribe((result) =>
        {
         this.ngxService.stop();
         this.toastr.success('Plan added succesfully.');
         this.router.navigateByUrl('admin/dashboard', {skipLocationChange: true}).then(()=>
-        this.router.navigate(["admin/plans"]));
+        this.router.navigate(["admin/motor-packages"]));
           this.signupForm.reset();
           this.modalRefAdd.hide();
           
@@ -159,6 +161,7 @@ this.ngxService.start()
     this.infos.duration = userDetails.duration;
     this.infos.description = userDetails.description;
     this.infos.text = userDetails.text;
+    this.infos.ads_limit = userDetails.ads_limit;
     this.infos.type = userDetails.type;
     this.userId = userDetails.id
   }
@@ -179,11 +182,12 @@ this.ngxService.start()
        formData.append('duration', this.infos.duration);
        formData.append('description', this.infos.description);
        formData.append('text', this.infos.text);
+       formData.append('ads_limit', this.infos.ads_limit);
        //formData.append('ns', this.infos.ns);
       
        this.adminService.updatePackage(formData,this.userId).subscribe((result) => {
         this.router.navigateByUrl('admin/dashboard', {skipLocationChange: true}).then(()=>
-        this.router.navigate(["admin/plans"]));
+        this.router.navigate(["admin/motor-packages"]));
         this.ngxService.stop();
         this.modalRefUpdate.hide();
        this.toastr.success('Plan updated succesfully.', 'Success');

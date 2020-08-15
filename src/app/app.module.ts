@@ -116,6 +116,9 @@ import { TransferHttpCacheModule } from '@nguniversal/common';
 import { NgtUniversalModule } from '@ng-toolkit/universal';
 import { Meta } from '@angular/platform-browser';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { MotorPackagesComponent } from './admin/motor-packages/motor-packages.component';
+import { VehicleValuationDetailsComponent } from './vehicle-valuation-details/vehicle-valuation-details.component';
+
 const cookieConfig:NgcCookieConsentConfig = {
   cookie: {
     domain: 'parrotautotrader.co.uk' // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
@@ -238,7 +241,9 @@ export function getAuthServiceConfigs() {
     VehicleCheckComponent,
     VehicleDetailsComponent,
     VehicleValuationComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    MotorPackagesComponent,
+    VehicleValuationDetailsComponent
     
     
   ],

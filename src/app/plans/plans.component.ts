@@ -15,15 +15,26 @@ import {CookieService} from 'angular2-cookie/core';
 export class PlansComponent implements OnInit {
   plans:any
   userID:any;
-  cmsData:any
+  cmsData:any;
+  motor:any;
   constructor(private activatedRoute:ActivatedRoute,private _cookieService:CookieService,private loginService: LoginService,private router : Router,private formBuilder: FormBuilder,private ngxService: NgxUiLoaderService,private toastr: ToastrService) {}
 
   ngOnInit() {
+    this.plans =[]
     this.cmsData =  this.loginService.getCms();
    this.userID = this.activatedRoute.snapshot.paramMap.get('id'); 
     this.ngxService.start();
     this.loginService.plans().subscribe((result) => {
-    this.plans = result["message"]
+      this.motor = []
+      let plans = result["message"];
+      for(var i=0; i<plans.length; i++){
+        if(plans[i].type == 'motor dealer'){
+          this.motor.push(plans[i])
+        }else{
+          this.plans.push(plans[i])
+        }
+      }
+    //this.plans = result["message"]
      this.ngxService.stop();
      //this.modal= this.modalService.show(template, Object.assign({}, ));
      //

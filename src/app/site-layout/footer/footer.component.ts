@@ -40,4 +40,10 @@ export class FooterComponent implements OnInit {
    
   }
 
+  vehicleValuation(){
+    this.router.navigateByUrl('/vehicle-valuation');
+   
+  }
+
+
 }

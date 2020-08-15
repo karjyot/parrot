@@ -71,6 +71,8 @@ import { VehicleCheckComponent } from './vehicle-check/vehicle-check.component';
 import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
 import { VehicleValuationComponent } from './vehicle-valuation/vehicle-valuation.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { MotorPackagesComponent } from './admin/motor-packages/motor-packages.component';
+import { VehicleValuationDetailsComponent } from './vehicle-valuation-details/vehicle-valuation-details.component';
 const routes: Routes = [{
   path: '',
   component: SiteLayoutComponent,
@@ -225,6 +227,10 @@ const routes: Routes = [{
   path: 'vehicle-valuation',
   component: VehicleValuationComponent
  },{
+  
+  path: 'vehicle-valuation-details',
+  component: VehicleValuationDetailsComponent
+ },{
       
   path: 'forgot-password',
   component: ForgotPasswordComponent
@@ -306,7 +312,7 @@ const routes: Routes = [{
    
    {
       
-    path: 'checkout',
+    path: 'checkout/:id',
     component: CheckoutComponent,
     canActivate:[AuthGuard],
    },{
@@ -457,6 +463,11 @@ const routes: Routes = [{
     },{
       path: 'admin/categories',
       component: CategoriesComponent,
+      canActivate:[AuthGuardAdmin],
+      pathMatch: 'full',
+    },{
+      path: 'admin/motor-packages',
+      component: MotorPackagesComponent,
       canActivate:[AuthGuardAdmin],
       pathMatch: 'full',
     },{
