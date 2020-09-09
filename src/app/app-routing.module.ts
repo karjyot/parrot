@@ -74,6 +74,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { MotorPackagesComponent } from './admin/motor-packages/motor-packages.component';
 import { AdminPopComponent } from './admin/admin-pop/admin-pop.component';
 import { VehicleValuationDetailsComponent } from './vehicle-valuation-details/vehicle-valuation-details.component';
+import { AdminEditAdComponent } from './admin/admin-edit-ad/admin-edit-ad.component';
 const routes: Routes = [{
   path: '',
   component: SiteLayoutComponent,
@@ -429,6 +430,11 @@ const routes: Routes = [{
     },{
       path: 'admin/percentage',
       component: ReferalPercentageComponent,
+      canActivate:[AuthGuardAdmin],
+      pathMatch: 'full',
+    },{
+      path: 'admin/edit-admin-ad',
+      component: AdminEditAdComponent,
       canActivate:[AuthGuardAdmin],
       pathMatch: 'full',
     },{

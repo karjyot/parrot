@@ -195,4 +195,11 @@ export class AdminService {
   changePostStatusPOP(id,status) {
     return this.http.get(AppSettings.API_ENDPOINT + 'admin/changePostStatusPop/'+id+'/'+status);
   } 
+  setAdminAd(data:any){
+    this.localStorage.setItem('setAdminAd',  JSON.stringify(data));
+  }
+  getAdminAd(){
+    let details = this.localStorage.getItem('setAdminAd');
+    return JSON.parse(details);
+  }
 }
