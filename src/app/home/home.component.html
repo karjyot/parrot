@@ -638,3 +638,52 @@
        </div>
     </div>
  </section>
+
+
+<section class="section-padding">
+   <div class="container">
+      <div class="row">
+         <div class="col-md-4">
+            <img class="img-fluid" src="assets/images/multiple.jpg">
+         </div>
+         <div class="col-md-8">
+            <div class="abt-content">
+               <h2>About Us</h2>
+               <p [innerHtml]="about | words : 50"></p> <a routerLink="/about-us">Read More</a>
+            </div>
+         </div>
+      </div>
+   </div>
+   
+</section>
+
+
+ <div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal"
+ class="modal fade"   tabindex="-1" role="dialog" aria-labelledby="dialog-auto-name">
+<div class="modal-dialog subscribe-pop">
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 id="dialog-auto-name" class="modal-title pull-left">Welcome to Parrot Auto Trader</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+        <div class="container">
+         <div class="row align-items-center">
+           <div class="col-md-4 col-sm-12 col-xs-12">
+             <img src="assets/images/logo.png"  alt="footer" class="img-fluid">
+           </div>
+           
+           <div class="col-md-12">
+            <p [innerHTML] = "content"></p>
+           </div>
+     
+         </div>
+        
+       </div>
+
+</div>
+</div>
+</div>
+</div>

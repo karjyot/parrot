@@ -97,6 +97,9 @@ export class LoginHeaderComponent implements OnInit {
 this.loginService.userType$.subscribe((data) => {
   this.details.user_type = data;
 })
+this.loginService.userName$.subscribe((data) => {
+  this.details.name = data;
+})
 this.loginService.updateMessage$.subscribe((data) => {
     
   let userDetails = this.loginService.getUserDetails();

@@ -1,17 +1,18 @@
-><div class="login-form">
+<div class="login-form">
     <div class="main-div">
        <div class="panel">
           <h2>Check Your Vehicle Value</h2>
 
        </div>
        <form>
-          <div class="form-group">
-              <label>Enter Registration</label>
-             <input type="text" placeholder="eg AB12CDE" [(ngModel)] = "registration" [ngModelOptions]="{standalone: true}" class="form-control" required>
+          <div class="form-group vh-check">
+            <label _ngcontent-serverapp-c6="">Enter Registration</label>
+            <img src="assets/images/gb.svg" alt="Reg Plate Icon" class="regPlateBadge">
+             <input type="text" [(ngModel)] = "registration" [ngModelOptions]="{standalone: true}" class="form-control" required>
           </div>
 
           <div class="form-group">
-            <label>Enter mileage</label>
+          
            <input type="test" placeholder="Mileage" [(ngModel)] = "mileage" [ngModelOptions]="{standalone: true}" class="form-control" required>
         </div>
          

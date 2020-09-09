@@ -19,6 +19,13 @@ export class LoginService {
   public updateMessage$  = this.messageType.asObservable();
   public logoutType$ = this.logoutType.asObservable();
 
+  private userName: Subject<any> = new Subject<any>();
+  public userName$ = this.userName.asObservable();
+  public sendUserNameUpdate(data: any){
+    console.log(data)
+    this.userName.next(data);
+  }
+
   public sendLogout(data: any){
 
     this.logoutType.next(data);
@@ -26,6 +33,7 @@ export class LoginService {
 updateMessageStatus(jsonPayload):Observable<any>{
   return this.http.post(AppSettings.API_ENDPOINT + 'updateMessageStatus',jsonPayload);
 }
+
 public messageData(data: any){
   
   this.messageType.next(data);

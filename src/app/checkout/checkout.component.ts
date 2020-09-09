@@ -50,11 +50,11 @@ export class CheckoutComponent implements OnInit {
  
   ngOnInit() {
     let id =  this.route.snapshot.params.id;
-    if(id =='create-new-ad'){
-      this.showFormAd = false
-    }else{
-      this.showFormSponsar = false
-    }
+    // if(id =='create-new-ad'){
+    //   this.showFormAd = false
+    // }else{
+    //   this.showFormSponsar = false
+    // }
    
     this.idParam = id
     this.ngxService.start();
@@ -130,7 +130,13 @@ export class CheckoutComponent implements OnInit {
               }
             }
           });
-          this.card.mount('#card-element');
+          if(id =='create-new-ad'){
+            this.showFormAd = false
+            this.card.mount('#card-element');
+          }else{
+            this.showFormSponsar = false
+            this.card.mount('#card-elements');
+          }
         }
       });
   }

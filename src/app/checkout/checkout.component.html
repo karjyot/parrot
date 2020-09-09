@@ -48,7 +48,7 @@
 
       <form novalidate [hidden] = "showFormSponsar" (ngSubmit)="buy(sponsarPrice)" [formGroup]="stripeTest" class="text-center">
         <input type="text" formControlName="name" placeholder="Jane Doe" class="form-control">
-        <div id="card-element" class="field"></div>
+        <div id="card-elements" class="field"></div>
        
         <button type="submit" class="btn btn-primary submit-btn">
           PAY £{{sponsarPrice}}

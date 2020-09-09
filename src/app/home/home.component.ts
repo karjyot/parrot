@@ -1,14 +1,14 @@
-import { Component, OnInit,Inject } from '@angular/core';
+import { Component, OnInit,Inject,ViewChild } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators, Form } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { LoginService } from "./../services/login.service";
-
+import { AdminService } from "./../admin/services/admin.service";
 import {CookieService} from 'angular2-cookie/core';
 import { Location } from '@angular/common';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Router,ActivatedRoute } from "@angular/router";
 @Component({
   selector: 'app-home',
@@ -19,20 +19,24 @@ export class HomeComponent implements OnInit {
   searchForm : FormGroup
   resultMakes:any
   constructor(private modalService: BsModalService,private location: Location,private route: ActivatedRoute,private loginService: LoginService,private router : Router,private formBuilder: FormBuilder,private ngxService: NgxUiLoaderService,private toastr: ToastrService, private titleService: Title,
-    private meta: Meta) {}
+    private meta: Meta,private admin:AdminService) {}
   totalRecords:any;
   options:any;
   city:any;
+  about:any
   type = "car";
   makes:any;
   models:any;
   years:any;
   bikeMakes:any;
+  content:any;
   makescpy:any;
   truckMakes:any;
   vanMakes:any;
+  @ViewChild('autoShownModal',{static: true}) autoShownModal: ModalDirective;
+  isModalShown: boolean = false;
   ngOnInit() {
-   
+    this.getHomePOP()
     // this.meta.addTag({name: 'description', content: 'Angular project training on rsgitech.com'});
     // this.meta.addTag({name: 'author', content: 'rsgitech'});
     // this.meta.addTag({name: 'robots', content: 'index, follow'});
@@ -59,6 +63,7 @@ export class HomeComponent implements OnInit {
     const years = Array(now - (now - 30)).fill('').map((v, idx) => now - idx);
     this.years = years;
     this.getMakes()
+    this.getAbout()
   }
 
 
@@ -214,6 +219,47 @@ console.log(this.truckMakes)
         break;
       }
     }
+  }
+  getHomePOP(){
+    this.admin.getPOP().subscribe((result) => {
+      let newsLetter = sessionStorage.getItem('newsletter');
+      if(!newsLetter && result['success'][0]['status'] == 1){
+      setTimeout(() => {
+        this.content = result['success'][0]['content']
+        this.isModalShown = true
+      }, 3000);
+       
+      }
+      
+    })
+  }
+
+  onHidden(): void {
+    this.isModalShown = false;
+    sessionStorage.setItem('newsletter', 'closed');
+  }
+  hideModal(): void {
+    this.isModalShown = false;
+
+    sessionStorage.setItem('newsletter', 'closed');
+  }
+  getAbout(){
+    this.loginService.about().subscribe(
+      res => {
+      //  console.log(res['success'])
+        if(res['success'].length > 0){
+       this.about = res['success'][0]['content'];
+       console.log(this.about)
+        }
+     
+       
+       this.ngxService.stop()
+      },
+      err => { 
+        this.ngxService.stop()
+        
+      }
+    )
   }
 }
 

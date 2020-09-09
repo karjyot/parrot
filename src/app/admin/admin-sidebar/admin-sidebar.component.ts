@@ -33,6 +33,11 @@ export class AdminSidebarComponent implements OnInit {
       this.selectedPage = 'payments'
       this.router.navigateByUrl('admin/payments');
     } 
+
+    if(type == 'homepage-pop'){
+      this.selectedPage = 'homepage-pop'
+      this.router.navigateByUrl('admin/homepage-pop');
+    } 
     if(type == 'admin-plans'){
       this.selectedPage = 'admin-plans'
       this.router.navigateByUrl('admin/plans');
@@ -41,6 +46,10 @@ export class AdminSidebarComponent implements OnInit {
     if(type == 'buy-car'){
       this.selectedPage = 'buy-car'
       this.router.navigateByUrl('admin/buy-car');
+    } 
+    if(type == 'buy-bike'){
+      this.selectedPage = 'buy-bike'
+      this.router.navigateByUrl('admin/buy-bike');
     } 
     if(type == 'faq'){
       this.selectedPage = 'faq'

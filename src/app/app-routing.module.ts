@@ -72,6 +72,7 @@ import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.compo
 import { VehicleValuationComponent } from './vehicle-valuation/vehicle-valuation.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { MotorPackagesComponent } from './admin/motor-packages/motor-packages.component';
+import { AdminPopComponent } from './admin/admin-pop/admin-pop.component';
 import { VehicleValuationDetailsComponent } from './vehicle-valuation-details/vehicle-valuation-details.component';
 const routes: Routes = [{
   path: '',
@@ -81,10 +82,10 @@ const routes: Routes = [{
   path: '',
   component: HomeComponent,
   data: {
-    title: 'Parrot Auto Trader - Used and New Cars for sale ',
+    title: 'Car Buying & Selling Platform Online UK | Parrot Auto Trader',
     //descrption: 'Description of Home Component',
     //ogTitle: 'Description of Home Component for social media',
-    keywords:'Buy Car, Buy Truck, Buy Vehicle, Buy Truck, Buy Bikes, Parrot Auto Trader, Auto Trader , User Cars for sale, New cars for sale'
+    keywords:'A UK and Northern Ireland automotive classified leader. Buy cars, bikes, vans, trucks online with vehicle check online. Both brand new and used vehicles.'
   }
  },{
       
@@ -478,6 +479,11 @@ const routes: Routes = [{
     },{
       path: 'admin/buy-bike',
       component: AdminBuyBikeComponent,
+      canActivate:[AuthGuardAdmin],
+      pathMatch: 'full',
+    },{
+      path: 'admin/homepage-pop',
+      component: AdminPopComponent,
       canActivate:[AuthGuardAdmin],
       pathMatch: 'full',
     }
