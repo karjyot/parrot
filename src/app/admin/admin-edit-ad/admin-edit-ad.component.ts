@@ -452,7 +452,7 @@ console.log(this.AdForm)
     this.ngxService.start();
  
     this.loginService.updateAd(formData,this.adID).subscribe((result) => {
-      this.router.navigateByUrl('/my-ads');
+      this.router.navigateByUrl('/admin/ads');
       this.toastr.success('Your ad updated successfully.')
        this.ngxService.stop();
       }, (err) => {

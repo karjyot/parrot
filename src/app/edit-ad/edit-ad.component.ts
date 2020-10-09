@@ -390,7 +390,9 @@ console.log(this.AdForm)
     this.toastr.error("Please add valid fields")
     return
   }
-
+  if(this.searchAddr == undefined  || this.searchAddr == "undefined"){
+    this.searchAddr = this.AdForm.value.city
+  }
     const formData = new FormData();
     if( this.fileData &&  this.fileData.length){
       for (var i = 0; i < this.fileData.length; i++) { 
